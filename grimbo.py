@@ -1,28 +1,23 @@
 import discord
-
+from discord.ext import commands
+from bot_logic import gen_pass
 # la variabile intents contiene i permessi al bot
 intents = discord.Intents.default()
 # abilita il permesso a leggere i contenuti dei messaggi
 intents.message_content = True
 # crea un bot e passa gli indents
-client = discord.Client(intents=intents)
-from bot_logic import gen_pass
-
-@client.event
+bot = commands.Bot(command_prefix="$", intents=intents)
+@bot.event
 async def on_ready():
-    print(f'Abbiamo fatto l\'accesso come {client.user}')
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$ciao'):
-        await message.channel.send("ciao")
-    elif message.content.startswith('$civediamo'):
-        await message.channel.send("ciao ci vediamo")
-    elif message.content.startswith("$password"):
-        await message.channel.send(gen_pass(10))
-    elif message.content.startswith("$fuoco"):
+    print(f'Abbiamo fatto l\'accesso come {bot.user}')
+@bot.command()
+async def ciao(ctx):
+    await ctx.send("Ciao!")
+@bot.command()
+async def pasw(ctx):
+    await ctx.send(gen_pass(10))
+bot.run("")
+    elif message.content.startswith("$fuoco")
         await message.channel.send("fuoco è debole ad acqua, roccia e terra.")
     elif message.content.startswith("$acqua"):
         await message.channel.send("acqua è debole a erba ed elettro.")
