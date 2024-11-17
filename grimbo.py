@@ -29,7 +29,7 @@ async def gras(ctx):
 async def elct(ctx):
     await ctx.send("elettro è debole a terra.")
 @bot.command()
-async def ice(ctx):
+async def icee(ctx):
     await ctx.send("ghiaccio è debole a fuoco, lotta, roccia e acciaio.")
 @bot.command()
 async def fght(ctx):
@@ -47,7 +47,7 @@ async def flng(ctx):
 async def psyc(ctx):
     await ctx.send("psico è debole a coleottero, buio e spettro.")
 @bot.command()
-async def bug(ctx):
+async def bugg(ctx):
     await ctx.send("coleottero è debole a fuoco, roccia e volante.")
 @bot.command()
 async def rock(ctx):
