@@ -1,15 +1,63 @@
 import discord
+import random, os
+import requests
 from discord.ext import commands
 from bot_logic import gen_pass
-# la variabile intents contiene i permessi al bot
 intents = discord.Intents.default()
-# abilita il permesso a leggere i contenuti dei messaggi
 intents.message_content = True
-# crea un bot e passa gli indents
-bot = commands.Bot(command_prefix="$", intents=intents)
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
 @bot.event
 async def on_ready():
-    print(f'Abbiamo fatto l\'accesso come {bot.user}')
+    print(f'È apparso un {bot.user} selvatico!')
+
+def get_duck_image_url():    
+    url = 'https://random-d.uk/api/random'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+def get_pokemon_info(pokemon_name):
+    '''Funzione per ottenere informazioni sul Pokémon dalla PokeAPI'''
+    url = f'https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}'
+    res = requests.get(url)
+
+    data = res.json()
+    return {
+        'name': data['name'].capitalize(),
+        'id': data['id'],
+        'types': [t['type']['name'] for t in data['types']],
+        'weight': data['weight'] / 10,  # Peso in kg
+        'sprite': data['sprites']['front_default']
+    }
+
+@bot.command('pokemon')
+async def pokemon(ctx, pokemon_name: str):
+    '''Risponde con informazioni sul Pokémon specificato'''
+    pokemon_info = get_pokemon_info(pokemon_name)
+
+    if pokemon_info:
+        embed = discord.Embed(title=f"{pokemon_info['name']} (ID: {pokemon_info['id']})", color=0x1ABC9C)
+        embed.set_thumbnail(url=pokemon_info['sprite'])
+        embed.add_field(name='Tipo', value=', '.join(pokemon_info['types']), inline=True)
+        embed.add_field(name='Peso', value=f"{pokemon_info['weight']} kg", inline=True)
+
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f"non conosco nessun pokemon chiamato `{pokemon_name}`. hai visto troppi ripoff.")
+@bot.command('duck')
+async def duck(ctx):
+    '''Una volta chiamato il comando duck, il programma richiama la funzione get_duck_image_url'''
+    image_url = get_duck_image_url()
+    await ctx.send(image_url)
+
+@bot.command()
+async def meme(ctx):
+    img_name = random.choice(os.listdir('images'))
+    with open(f'images/{img_name}', 'rb') as f:
+        picture = discord.File(f)
+    await ctx.send(file=picture)
 @bot.command()
 async def ciao(ctx):
     await ctx.send("ciao")
@@ -70,4 +118,4 @@ async def fary(ctx):
 @bot.command()
 async def nrml(ctx):
     await ctx.send("normale è debole a lotta.")
-bot.run("insert_token")
+bot.run("token :)")
