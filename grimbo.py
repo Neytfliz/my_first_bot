@@ -31,9 +31,7 @@ def get_pokemon_info(pokemon_name):
         'weight': data['weight'] / 10,  # Peso in kg
         'sprite': data['sprites']['front_default']
     }
-@bot.command()
-async def help(ctx):
-    await ctx.send("help, pokemon (insert name here), duck, meme, ciao, pasw, fire, watr, gras, elect, icee, fght, posn, grnd, flng, psyc, bugg, rock, ghst, dark, drgn, stel, fary, nrml")
+
 @bot.command('pokemon')
 async def pokemon(ctx, pokemon_name: str):
     '''Risponde con informazioni sul Pokémon specificato'''
@@ -63,6 +61,9 @@ async def meme(ctx):
 @bot.command()
 async def ciao(ctx):
     await ctx.send("ciao")
+@bot.command()
+async def helpme(ctx):
+    await ctx.send("help, pokemon (insert name here), duck, meme, ciao, pasw, fire, watr, gras, elect, icee, fght, posn, grnd, flng, psyc, bugg, rock, ghst, dark, drgn, stel, fary, nrml")
 @bot.command()
 async def pasw(ctx):
     await ctx.send(gen_pass(10))
